@@ -16,7 +16,7 @@ class DhsrFacilityListing:
     def __init__(self):
 
         # A list of all the record dictionaries
-        self.records = list()
+        self.facilities = list()
 
         # Retrieve and store the facility listings from the DHSR
         # website when we create a new listing object
@@ -71,17 +71,20 @@ class DhsrFacilityListing:
     def retrieveRecords(self):
 
         # Retrieve a list of field names from the DHSR website
-        self.fieldNames = self.retrieveFieldNames(DHSR_HAHEADER_FILE_URL)
+        fieldNames = self.retrieveFieldNames(DHSR_HAHEADER_FILE_URL)
 
         # Retrieve the facility records from the DHSR website
-        self.facilityRecords = self.retrieve(DHSR_DATA_FILE_URL)
+        records = self.retrieve(DHSR_DATA_FILE_URL)
+        facilityRecords = records.split('\r\n')
 
-        # Save a list of dictionaries containing the facility records
-        #TODO: figure out how to return a dictionary instead of a DictReader object
-        reader = DictReader(self.facilityRecords, fieldnames=self.fieldNames)
+        # Use the csv DictReader to create dictionaries for each row
+        # in the csv row inserting the field names as keys in the
+        # dictionaries
+        reader = DictReader(facilityRecords, fieldnames=fieldNames)
 
+        # append each facility dictionary to the list of facilities
         for row in reader:
-            self.records.append(row)
+            self.facilities.append(row)
 
     def getRecords(self):
-        return self.records
+        return self.facilities
