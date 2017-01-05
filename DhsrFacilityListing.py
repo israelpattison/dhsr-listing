@@ -21,6 +21,7 @@ class DhsrFacilityListing:
         # Retrieve and store the facility listings from the DHSR
         # website when we create a new listing object
         self._retrieveRecords()
+        self._getListOfCountiesWithFacilities()
 
     # A method to retrieve and return contents from the web for both
     # the header file and the facility listing
@@ -86,5 +87,17 @@ class DhsrFacilityListing:
         for row in reader:
             self._facilities.append(row)
 
+    def _getListOfCountiesWithFacilities(self):
+        counties = list()
+        for facility in self._facilities:
+            if facility['FCOUNTY'] not in counties:
+                counties.append(facility['FCOUNTY'])
+        counties.sort()
+        self._counties = counties
+
+
     def getRecords(self):
         return self._facilities
+
+    def getCounties(self):
+        return self._counties
