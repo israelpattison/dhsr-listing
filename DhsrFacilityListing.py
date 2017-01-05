@@ -6,25 +6,25 @@ import re, cStringIO
 DHSR_SITE = 'https://www2.ncdhhs.gov/dhsr'
 
 # The URI for the facility listing header file on the DHSR website
-DHSR_HAHEADER_FILE_URL = DHSR_SITE + '/data/ha-header.txt'
+DHSR_HAHEADER_FILE_URL = DHSR_SITE + '/data/icfmr-header.txt'
 
 # The URI for the facility listing records on the DHSR website
-DHSR_DATA_FILE_URL = DHSR_SITE + '/data/ha.txt'
+DHSR_DATA_FILE_URL = DHSR_SITE + '/data/icfmr.txt'
 
 class DhsrFacilityListing:
 
     def __init__(self):
 
         # A list of all the record dictionaries
-        self.facilities = list()
+        self._facilities = list()
 
         # Retrieve and store the facility listings from the DHSR
         # website when we create a new listing object
-        self.retrieveRecords()
+        self._retrieveRecords()
 
     # A method to retrieve and return contents from the web for both
     # the header file and the facility listing
-    def retrieve(self, url):
+    def _retrieve(self, url):
 
         # Use HTTP GET to retrieve the text contents of the file based
         # on the URI
@@ -52,11 +52,11 @@ class DhsrFacilityListing:
 
     # A method to retrieve the header file from the DHSR website
     # and return a the field names as a list
-    def retrieveFieldNames(self, url):
+    def _retrieveFieldNames(self, url):
 
         # Retrieve and store the contents of the facilities listing
         # header file from the DHSR website
-        content = self.retrieve(url)
+        content = self._retrieve(url)
 
         # Process the file to find the line containing the field names
         lines = content.split('\r\n')
@@ -68,13 +68,13 @@ class DhsrFacilityListing:
         # Return a list of field names to the caller
         return fieldNames
 
-    def retrieveRecords(self):
+    def _retrieveRecords(self):
 
         # Retrieve a list of field names from the DHSR website
-        fieldNames = self.retrieveFieldNames(DHSR_HAHEADER_FILE_URL)
+        fieldNames = self._retrieveFieldNames(DHSR_HAHEADER_FILE_URL)
 
         # Retrieve the facility records from the DHSR website
-        records = self.retrieve(DHSR_DATA_FILE_URL)
+        records = self._retrieve(DHSR_DATA_FILE_URL)
         facilityRecords = records.split('\r\n')
 
         # Use the csv DictReader to create dictionaries for each row
@@ -84,7 +84,7 @@ class DhsrFacilityListing:
 
         # append each facility dictionary to the list of facilities
         for row in reader:
-            self.facilities.append(row)
+            self._facilities.append(row)
 
     def getRecords(self):
-        return self.facilities
+        return self._facilities

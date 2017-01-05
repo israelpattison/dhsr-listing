@@ -3,4 +3,8 @@ from DhsrFacilityListing import *
 listing = DhsrFacilityListing()
 records = listing.getRecords()
 
-print records[1]
+for thisRecord in records:
+    print thisRecord.get('FACILITY')
+    print thisRecord.get('SADDR')
+    print thisRecord.get('SCITY') + ", " + thisRecord.get('SSTATE') + " " + thisRecord.get('SZIP')
+    print ""
