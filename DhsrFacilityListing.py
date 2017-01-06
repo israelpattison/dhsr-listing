@@ -17,11 +17,14 @@ class DhsrFacilityListing:
 
         # A list of all the record dictionaries
         self._facilities = list()
+        self._counties = list()
+        self._licensees = list()
 
         # Retrieve and store the facility listings from the DHSR
         # website when we create a new listing object
         self._retrieveRecords()
         self._getListOfCountiesWithFacilities()
+        self._getListOfLicensees()
 
     # A method to retrieve and return contents from the web for both
     # the header file and the facility listing
@@ -95,9 +98,32 @@ class DhsrFacilityListing:
         counties.sort()
         self._counties = counties
 
+    def _getListOfLicensees(self):
+        licensees = list()
+        for facility in self._facilities:
+            if facility['LICENSEE'] not in licensees:
+                licensees.append(facility['LICENSEE'])
+        licensees.sort()
+        self._licensees = licensees
+
+    def _getRecordsByKey(self, key, value):
+        records = list()
+        for facility in self._facilities:
+            if facility[key] == value:
+                records.append(facility)
+        return records.sort()
 
     def getRecords(self):
         return self._facilities
 
     def getCounties(self):
         return self._counties
+
+    def getLicensees(self):
+        return self._licensees
+
+    def getRecordsForCounty(self, county):
+        return _getRecordsByKey("FCOUNTY", county)
+
+    def getRecordsForLicensee(self, licensee):
+        return _getRecordsByKey("LICENSEE", licensee)
