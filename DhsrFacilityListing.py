@@ -123,7 +123,7 @@ class DhsrFacilityListing:
         return self._licensees
 
     def getRecordsForCounty(self, county):
-        return _getRecordsByKey("FCOUNTY", county)
+        return self._getRecordsByKey("FCOUNTY", county)
 
     def getRecordsForLicensee(self, licensee):
-        return _getRecordsByKey("LICENSEE", licensee)
+        return self._getRecordsByKey("LICENSEE", licensee)
